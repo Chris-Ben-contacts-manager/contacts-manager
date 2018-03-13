@@ -14,10 +14,7 @@ public class GetContact {
             "----------------------------------------"
                     + "----------------------------------------";
 
-
-
 //    RUN APP AND PROMPT USER
-
     public static void askUser() {
         System.out.println("Welcome to the contacts manager app\n" +
                 "1. View Contacts \n" +
@@ -29,15 +26,12 @@ public class GetContact {
     }
 
 
-////    PRINT CONTACTS FOR USER TO SEE
-
+//    PRINT CONTACTS FOR USER TO SEE
     public static void showContacts() throws FileNotFoundException {
-
 
         System.out.println(DASHES);
         System.out.printf("%-33s | %5s" , "NAME", "PHONE NUMBER\n");
         System.out.println(DASHES);
-
 
         for (int i = 0; i < contactList().size(); i++) {
             int removeDash = contactList().get(i).indexOf("_");
@@ -61,13 +55,11 @@ public class GetContact {
             }
 
             System.out.printf((i+1) + ". %-30s | %-15s\n",fullName,phoneNumber);
-
             System.out.println(DASHES);
         }
     }
 
 //    CONVERTS CONTACTS.TXT TO ARRAY LIST
-
     public static ArrayList<String> contactList() throws FileNotFoundException {
         Scanner scan = new Scanner(new File("contacts.txt"));
         ArrayList<String> list = new ArrayList<String>();
@@ -78,8 +70,7 @@ public class GetContact {
     }
 
 //    ADD A CONTACT
-
-    public static void addContact() {
+    public static void addContact() throws FileNotFoundException {
         String number;
         Scanner scan = new Scanner(System.in);
         ArrayList<String> newContact = new ArrayList<>();
@@ -92,12 +83,16 @@ public class GetContact {
             number = scan.nextLine();
         } while(number.length()<7 || number.length()>10);
         String addContact = firstName + "_" + lastName + "#" + number;
-        newContact.add(addContact);
-        spit("contacts.txt", newContact, true);
+
+        if (contactList().contains(addContact)) {
+            System.out.println("Account found: User already exists in our database");
+        } else {
+            newContact.add(addContact);
+            spit("contacts.txt", newContact, true);
+        }
     }
 
-//    SEARCH FOR A CONTACT
-
+    //    SEARCH FOR A CONTACT
     public static void search() throws IOException {
         Scanner scan = new Scanner(System.in);
         System.out.println("Please enter the name of the contact you want information on: ");
@@ -171,7 +166,7 @@ public class GetContact {
                 }
             }
 
-            } while (true) ;
+            } while (true);
         }
 
 
