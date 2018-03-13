@@ -10,6 +10,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class GetContact {
+    private static final String DASHES =
+            "----------------------------------------"
+                    + "----------------------------------------";
+
+
 
 //    RUN APP AND PROMPT USER
 
@@ -27,8 +32,37 @@ public class GetContact {
 ////    PRINT CONTACTS FOR USER TO SEE
 
     public static void showContacts() throws FileNotFoundException {
+
+
+        System.out.println(DASHES);
+        System.out.printf("%-33s | %5s" , "NAME", "PHONE NUMBER\n");
+        System.out.println(DASHES);
+
+
         for (int i = 0; i < contactList().size(); i++) {
-            System.out.println(i + ". " + contactList().get(i));
+            int removeDash = contactList().get(i).indexOf("_");
+            int removeHash = contactList().get(i).indexOf("#");
+            String firstName = contactList().get(i).substring(0,removeDash);
+            String lastName = contactList().get(i).substring(removeDash+1,removeHash);
+            String fullName = firstName + " " + lastName;
+            String phoneNumber = contactList().get(i).substring(removeHash+1);
+            if(phoneNumber.length()==7 || phoneNumber.length()==10) {
+                if (phoneNumber.length() == 7) {
+                    String first3 = phoneNumber.substring(0, 3);
+                    String last4 = phoneNumber.substring(3);
+                    phoneNumber = first3 + "-" + last4;
+                }
+                if (phoneNumber.length() == 10) {
+                    String first3 = phoneNumber.substring(0, 3);
+                    String mid3 = phoneNumber.substring(3, 6);
+                    String last4 = phoneNumber.substring(6);
+                    phoneNumber = first3 + "-" + mid3 + "-" + last4;
+                }
+            }
+
+            System.out.printf((i+1) + ". %-30s | %-15s\n",fullName,phoneNumber);
+
+            System.out.println(DASHES);
         }
     }
 
@@ -46,15 +80,18 @@ public class GetContact {
 //    ADD A CONTACT
 
     public static void addContact() {
+        String number;
         Scanner scan = new Scanner(System.in);
         ArrayList<String> newContact = new ArrayList<>();
         System.out.println("Enter the contacts first name");
         String firstName = scan.nextLine();
         System.out.println("Enter the contacts last name");
         String lastName = scan.nextLine();
-        System.out.println("Enter " + firstName + " " + lastName + "'s phone number");
-        String number = scan.nextLine();
-        String addContact = firstName + "_" + lastName + "_" + number;
+        do {
+            System.out.println("Enter " + firstName + " " + lastName + "'s phone number with no dashes. Should be between 7 and 10 digits.");
+            number = scan.nextLine();
+        } while(number.length()<7 || number.length()>10);
+        String addContact = firstName + "_" + lastName + "#" + number;
         newContact.add(addContact);
         spit("contacts.txt", newContact, true);
     }
@@ -83,14 +120,15 @@ public class GetContact {
 
 //    DELETE A CONTACT
     public static void deleteContact() throws IOException {
-        for(int i = 0;i<contactList().size();i++){
-            System.out.println(i + ". " + contactList().get(i));
-        }
-        System.out.println("Please enter the corresponding number of the contact that you'd like to delete ");
-        Scanner scan = new Scanner(System.in);
-        int deletedContact = scan.nextInt();
+        showContacts();
+        int deletedContact;
         ArrayList<String> temp = contactList();
-        temp.remove(deletedContact);
+        do {
+            System.out.println("Please enter the corresponding number of the contact that you'd like to delete ");
+            Scanner scan = new Scanner(System.in);
+            deletedContact = scan.nextInt();
+        }while(deletedContact>temp.size() || deletedContact<=0);
+        temp.remove(deletedContact-1);
         Files.write(Paths.get("contacts.txt"), temp);
     }
 
