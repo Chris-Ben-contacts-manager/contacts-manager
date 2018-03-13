@@ -52,7 +52,7 @@ public class GetContact {
         String firstName = scan.nextLine();
         System.out.println("Enter the contacts last name");
         String lastName = scan.nextLine();
-        System.out.println("Enter " + firstName + "'s phone number");
+        System.out.println("Enter " + firstName + " " + lastName + "'s phone number");
         String number = scan.nextLine();
         String addContact = firstName + "_" + lastName + "_" + number;
         newContact.add(addContact);
