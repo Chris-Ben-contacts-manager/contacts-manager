@@ -48,11 +48,13 @@ public class GetContact {
     public static void addContact() {
         Scanner scan = new Scanner(System.in);
         ArrayList<String> newContact = new ArrayList<>();
-        System.out.println("Enter the new contact name");
-        String contact = scan.nextLine();
-        System.out.println("Enter the contacts phone number");
+        System.out.println("Enter the contacts first name");
+        String firstName = scan.nextLine();
+        System.out.println("Enter the contacts last name");
+        String lastName = scan.nextLine();
+        System.out.println("Enter " + firstName + " " + lastName + "'s phone number");
         String number = scan.nextLine();
-        String addContact = contact +"_"+ number;
+        String addContact = firstName + "_" + lastName + "_" + number;
         newContact.add(addContact);
         spit("contacts.txt", newContact, true);
     }
